@@ -35,14 +35,6 @@ ENV/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# Data files (if too large)
-*.xlsx
-*.csv
-*.json
-
-# Model files
-*.pkl
-*.joblib
 
 # Logs
 *.log
