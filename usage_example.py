@@ -6,7 +6,10 @@ USAGE EXAMPLE - Ví dụ sử dụng model_loader.py
 
 from model_loader import ModelLoader, ClassAnalyzer, IndividualAnalyzer, PredictionTools
 
-
+class_model_path = "/Users/thuan.nguyen.trong/Desktop/workspace/thuannt/hsmh_model/trained_models/class_model/class_model.pkl"
+class_metadata_path = "/Users/thuan.nguyen.trong/Desktop/workspace/thuannt/hsmh_model/trained_models/class_model/metadata.pkl"
+individual_model_path = "trained_models/individual_model/individual_model.pkl"
+individual_metadata_path = "trained_models/individual_model/metadata.pkl"
 # ============================================================================
 # VÍ DỤ 1: Load model trực tiếp và sử dụng
 # ============================================================================
@@ -17,24 +20,24 @@ def example_1_basic_load():
     print("=" * 80)
     
     # Bước 1: Tạo ModelLoader
-    loader = ModelLoader()
+    loader = ModelLoader(class_model_path, class_metadata_path)
     
     # Bước 2: Load model từ file pickle
-    if loader.load():
-        print("\n✅ Model đã load xong, có thể sử dụng!")
-        
-        # Bước 3: Sử dụng model để dự đoán
-        result = loader.predict_reason_solution(
-            dataset_key='clo_attendance',
-            features=[0.6],  # Điểm CLO = 0.6 (normalized)
-            top_k=3
-        )
-        
-        if result:
-            print(f"\n📊 Kết quả dự đoán:")
-            print(f"   Dataset: {result['dataset']}")
-            print(f"   Mức độ: {result['severity_level']}")
-            print(f"   Số reasons: {len(result['results'])}")
+    loader.load()
+    print("\n✅ Model đã load xong, có thể sử dụng!")
+    
+    # Bước 3: Sử dụng model để dự đoán
+    result = loader.predict_reason_solution(
+        dataset_key='clo_attendance',
+        features=[0.6],  # Điểm CLO = 0.6 (normalized)
+        top_k=3
+    )
+    
+    if result:
+        print(f"\n📊 Kết quả dự đoán:")
+        print(f"   Dataset: {result['dataset']}")
+        print(f"   Mức độ: {result['severity_level']}")
+        print(f"   Số reasons: {len(result['results'])}")
 
 
 # ============================================================================
@@ -47,7 +50,7 @@ def example_2_analyze_class_simple():
     print("=" * 80)
     
     # Khởi tạo analyzer (tự động load model)
-    analyzer = ClassAnalyzer()
+    analyzer = ClassAnalyzer(class_model_path, class_metadata_path)
     
     # Phân tích lớp
     analyzer.analyze(
@@ -69,7 +72,7 @@ def example_3_analyze_class_with_result():
     print("VÍ DỤ 3: PHÂN TÍCH LỚP - LẤY KẾT QUẢ")
     print("=" * 80)
     
-    analyzer = ClassAnalyzer()
+    analyzer = ClassAnalyzer(class_model_path, class_metadata_path)
     
     # Phân tích (không display, lấy kết quả về)
     result = analyzer.analyze(
@@ -107,7 +110,7 @@ def example_4_analyze_individual():
     print("VÍ DỤ 4: PHÂN TÍCH CÁ NHÂN")
     print("=" * 80)
     
-    analyzer = IndividualAnalyzer()
+    analyzer = IndividualAnalyzer(individual_model_path, individual_metadata_path)
     
     # Phân tích 1 sinh viên
     result = analyzer.analyze(
@@ -130,7 +133,7 @@ def example_5_prediction_tools():
     print("=" * 80)
     
     # Khởi tạo tools
-    tools = PredictionTools()
+    tools = PredictionTools(individual_model_path, individual_metadata_path)
     
     # 1. Dự đoán Teaching Methods
     print("\n1️⃣ Phương pháp giảng dạy:")
@@ -165,7 +168,7 @@ def example_6_custom_model_path():
     print("=" * 80)
     
     # Load model từ path cụ thể
-    loader = ModelLoader("trained_models/individual_model/individual_model.pkl")
+    loader = ModelLoader(individual_model_path, individual_metadata_path)
     
     if loader.load():
         print("\n✅ Đã load individual model!")
@@ -195,11 +198,11 @@ def main():
     
     try:
         example_1_basic_load()
-        example_2_analyze_class_simple()
-        example_3_analyze_class_with_result()
-        example_4_analyze_individual()
-        example_5_prediction_tools()
-        example_6_custom_model_path()
+        # example_2_analyze_class_simple()
+        # example_3_analyze_class_with_result()
+        # example_4_analyze_individual()
+        # example_5_prediction_tools()
+        # example_6_custom_model_path()
         
         print("\n" + "=" * 80)
         print("✅ TẤT CẢ VÍ DỤ HOÀN THÀNH!")
